@@ -28,9 +28,9 @@ func (mbph mockProperyHandler) UpdateChannel() <-chan interface{} {
 }
 
 func main() {
-    sm := smarthome.New(smarthome.AuthorizationFunc(func (req smarthome.AcceptGrantRequest) error {
+	sm := smarthome.New(smarthome.AuthorizationFunc(func (req smarthome.AcceptGrantRequest) error {
 	    return nil
-    }))
+	}))
 
 	abstractTestDevice := smarthome.NewAbstractDevice(
 		"1",
@@ -44,7 +44,7 @@ func main() {
 
 	sm.AddDevice(abstractTestDevice)
 
-    lambda.Start(sm.Handle)
+	lambda.Start(sm.Handle)
 }
 
 
