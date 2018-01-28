@@ -9,21 +9,21 @@ import (
     smarthome "github.com/orktes/go-alexa-smarthome"
 )
 
-type mockProperyHandler struct {
+type mockPropertyHandler struct {
 	val interface{}
 }
 
-func (mbph mockProperyHandler) GetValue() (interface{}, error) {
-	return mbph.val, nil
+func (mockHandler mockPropertyHandler) GetValue() (interface{}, error) {
+	return mockHandler.val, nil
 }
 
-func (mbph mockProperyHandler) SetValue(val interface{}) error {
+func (mockHandler mockPropertyHandler) SetValue(val interface{}) error {
 	fmt.Printf("Received value %+v\n", val)
-	mbph.val = val
+	mockHandler.val = val
 	return nil
 }
 
-func (mbph mockProperyHandler) UpdateChannel() <-chan interface{} {
+func (mockHandler mockPropertyHandler) UpdateChannel() <-chan interface{} {
 	return nil
 }
 
@@ -40,7 +40,7 @@ func main() {
 	)
 	abstractTestDevice.AddDisplayCategory("SWITCH")
 	capability := abstractTestDevice.NewCapability("PowerController")
-	capability.AddPropertyHandler("powerState", &mockProperyHandler{val: "ON"})
+	capability.AddPropertyHandler("powerState", &mockPropertyHandler{val: "ON"})
 
 	sm.AddDevice(abstractTestDevice)
 
