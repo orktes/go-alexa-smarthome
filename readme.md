@@ -13,17 +13,18 @@ type mockPropertyHandler struct {
 	val interface{}
 }
 
-func (mockHandler mockPropertyHandler) GetValue() (interface{}, error) {
+func (mockHandler *mockPropertyHandler) GetValue() (interface{}, error) {
+    fmt.Printf("Getting value %+v\n", mockHandler.val)
 	return mockHandler.val, nil
 }
 
-func (mockHandler mockPropertyHandler) SetValue(val interface{}) error {
+func (mockHandler *mockPropertyHandler) SetValue(val interface{}) error {
 	fmt.Printf("Received value %+v\n", val)
 	mockHandler.val = val
 	return nil
 }
 
-func (mockHandler mockPropertyHandler) UpdateChannel() <-chan interface{} {
+func (mockHandler *mockPropertyHandler) UpdateChannel() <-chan interface{} {
 	return nil
 }
 
