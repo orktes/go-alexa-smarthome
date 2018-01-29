@@ -2,8 +2,10 @@ package smarthome
 
 import (
 	"encoding/json"
+	"fmt"
 	"reflect"
 	"sync"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -25,10 +27,11 @@ func New(auth AuthorizationInterface) (sh *Smarthome) {
 	}
 
 	sh.controllers = map[string]interface{}{
-		"Alexa":                 &alexa{sh},
-		"Alexa.Authorization":   &authorization{sh},
-		"Alexa.Discovery":       &discovery{sh},
-		"Alexa.PowerController": &powerController{sh},
+		"Alexa":                      &alexa{sh},
+		"Alexa.Authorization":        &authorization{sh},
+		"Alexa.Discovery":            &discovery{sh},
+		"Alexa.PowerController":      &powerController{sh},
+		"Alexa.BrightnessController": &brightnessController{sh},
 	}
 
 	return
@@ -111,8 +114,17 @@ func (s *Smarthome) Handle(req *Request) *Response {
 
 	errReturn := res[1].Interface()
 	if errReturn != nil {
-		resName = "ErrorResponse"
-		payload = errReturn
+		if err, ok := errReturn.(*sherror); ok {
+			payload = map[string]interface{}{
+				"type":    err.Type,
+				"message": err.Message,
+			}
+		} else {
+			payload = map[string]interface{}{
+				"type":    "UNKNOWN",
+				"message": fmt.Sprintf("%s", errReturn),
+			}
+		}
 		context = nil
 	}
 
@@ -130,4 +142,36 @@ func (s *Smarthome) Handle(req *Request) *Response {
 		},
 		Context: context,
 	}
+}
+
+func (s *Smarthome) setPropertyStatesAndCreateEndpointResponse(endpoint Endpoint, set map[string]map[string]interface{}, respond map[string]map[string]interface{}) (resp EndpointResponse, err error) {
+	device := s.GetDevice(endpoint.EndpointID)
+	if device == nil {
+		return resp, fmt.Errorf("Could not find endpoint with id %s", endpoint.EndpointID)
+	}
+
+	for capabilityName, properties := range set {
+		c := device.GetCapabilityHandler(capabilityName)
+		for propName, propValue := range properties {
+			if c != nil && c.propertyHandlers[propName] != nil {
+				if err := c.propertyHandlers[propName].SetValue(propValue); err != nil {
+					return resp, err
+				}
+			}
+		}
+	}
+
+	for capabilityName, properties := range respond {
+		for propName, propValue := range properties {
+			resp.Properties = append(resp.Properties, Property{
+				Namespace:                 capabilityName,
+				Name:                      propName,
+				Value:                     propValue,
+				TimeOfSample:              zuluTime{time.Now()},
+				UncertaintyInMilliseconds: 0,
+			})
+		}
+	}
+
+	return resp, nil
 }
