@@ -65,7 +65,7 @@ func main() {
  - [ ] SceneController 
  - [x] StateReport 
  - [ ] TemperatureSensor 
- - [ ] BrightnessController 
+ - [x] BrightnessController 
  - [ ] ChangeReport 
  - [ ] ColorController 
  - [ ] DeferredResponse 
@@ -73,7 +73,7 @@ func main() {
  - [ ] LockController 
  - [ ] PlaybackController 
  - [ ] PowerLevelController 
- - [ ] Speaker 
+ - [x] Speaker 
  - [ ] StepSpeaker 
  - [ ] ThermostatController
 

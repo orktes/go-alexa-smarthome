@@ -32,6 +32,7 @@ func New(auth AuthorizationInterface) (sh *Smarthome) {
 		"Alexa.Discovery":            &discovery{sh},
 		"Alexa.PowerController":      &powerController{sh},
 		"Alexa.BrightnessController": &brightnessController{sh},
+		"Alexa.Speaker":              &speaker{sh},
 	}
 
 	return
