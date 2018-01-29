@@ -55,32 +55,32 @@ func main() {
 ### Controllers
 
  - [x] Authorization 
- - [] CameraStreamController 
- - [] ChannelController 
- - [] ColorTemperatureController 
+ - [ ] CameraStreamController 
+ - [ ] ChannelController 
+ - [ ] ColorTemperatureController 
  - [x] Discovery 
- - [] InputController 
- - [] PercentageController 
+ - [ ] InputController 
+ - [ ] PercentageController 
  - [x] PowerController 
- - [] SceneController 
+ - [ ] SceneController 
  - [x] StateReport 
- - [] TemperatureSensor 
- - [] BrightnessController 
- - [] ChangeReport 
- - [] ColorController 
- - [] DeferredResponse 
+ - [ ] TemperatureSensor 
+ - [ ] BrightnessController 
+ - [ ] ChangeReport 
+ - [ ] ColorController 
+ - [ ] DeferredResponse 
  - [x] ErrorResponse 
- - [] LockController 
- - [] PlaybackController 
- - [] PowerLevelController 
- - [] Speaker 
- - [] StepSpeaker 
- - [] ThermostatController
+ - [ ] LockController 
+ - [ ] PlaybackController 
+ - [ ] PowerLevelController 
+ - [ ] Speaker 
+ - [ ] StepSpeaker 
+ - [ ] ThermostatController
 
 ### High level APIs (device abstractions)
-- [] Light
-- [] Switch
-- [] TV
-- [] Amplifier
-- [] Speaker
-- [] Temperature sensor
+- [ ] Light
+- [ ] Switch
+- [ ] TV
+- [ ] Amplifier
+- [ ] Speaker
+- [ ] Temperature sensor
