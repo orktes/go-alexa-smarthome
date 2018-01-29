@@ -48,7 +48,39 @@ func main() {
 	lambda.Start(sm.Handle)
 }
 
-
-
-
 ```
+
+## TODO
+
+### Controllers
+
+ - [x] Authorization 
+ - [] CameraStreamController 
+ - [] ChannelController 
+ - [] ColorTemperatureController 
+ - [x] Discovery 
+ - [] InputController 
+ - [] PercentageController 
+ - [x] PowerController 
+ - [] SceneController 
+ - [x] StateReport 
+ - [] TemperatureSensor 
+ - [] BrightnessController 
+ - [] ChangeReport 
+ - [] ColorController 
+ - [] DeferredResponse 
+ - [x] ErrorResponse 
+ - [] LockController 
+ - [] PlaybackController 
+ - [] PowerLevelController 
+ - [] Speaker 
+ - [] StepSpeaker 
+ - [] ThermostatController
+
+### High level APIs (device abstractions)
+- [] Light
+- [] Switch
+- [] TV
+- [] Amplifier
+- [] Speaker
+- [] Temperature sensor
