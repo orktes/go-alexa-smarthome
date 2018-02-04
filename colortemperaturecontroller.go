@@ -47,7 +47,7 @@ func (cc *colorTemperatureController) IncreaseColorTemperature(endpoint Endpoint
 func (cc *colorTemperatureController) SetColorTemperature(endpoint Endpoint, payload SetColorTemperatureRequest) (resp EndpointResponse, err error) {
 	return cc.sm.setPropAndEndpointHealthResponse(
 		endpoint,
-		"Alexa.ColorController",
+		"Alexa.ColorTemperatureController",
 		"colorTemperatureInKelvin",
 		payload.ColorTemperatureInKelvin,
 	)
