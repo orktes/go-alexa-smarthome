@@ -29,5 +29,22 @@ func (a *alexa) ReportState(endpoint Endpoint) (resp EndpointResponse, err error
 			})
 		}
 	}
+
+	/*
+		Alexa.EndpointHealth
+	*/
+
+	if device.GetCapabilityHandler("Alexa.EndpointHealth") == nil {
+		resp.Properties = append(resp.Properties, Property{
+			Namespace: "Alexa.EndpointHealth",
+			Name:      "connectivity",
+			Value: map[string]interface{}{
+				"value": "OK",
+			},
+			TimeOfSample:              zuluTime{time.Now()},
+			UncertaintyInMilliseconds: 0,
+		})
+	}
+
 	return
 }
