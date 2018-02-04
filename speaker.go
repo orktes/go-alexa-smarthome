@@ -1,7 +1,5 @@
 package smarthome
 
-import "fmt"
-
 type SetMuteRequest struct {
 	Mute bool `json:"mute"`
 }
@@ -20,63 +18,29 @@ type speaker struct {
 }
 
 func (s *speaker) SetMute(endpoint Endpoint, payload SetMuteRequest) (resp EndpointResponse, err error) {
-	return s.sm.setPropertyStatesAndCreateEndpointResponse(
+	return s.sm.setPropAndEndpointHealthResponse(
 		endpoint,
-		map[string]map[string]interface{}{
-			"Alexa.Speaker": map[string]interface{}{
-				"mute": payload.Mute,
-			},
-		},
-		map[string]map[string]interface{}{
-			"Alexa.Speaker": map[string]interface{}{
-				"mute": payload.Mute,
-			},
-			"Alexa.EndpointHealth": map[string]interface{}{
-				"connectivity": map[string]interface{}{
-					"value": "OK",
-				},
-			},
-		})
+		"Alexa.Speaker",
+		"mute",
+		payload.Mute,
+	)
+
 }
 
 func (s *speaker) SetVolume(endpoint Endpoint, payload SetVolumeRequest) (resp EndpointResponse, err error) {
-	return s.sm.setPropertyStatesAndCreateEndpointResponse(
+	return s.sm.setPropAndEndpointHealthResponse(
 		endpoint,
-		map[string]map[string]interface{}{
-			"Alexa.Speaker": map[string]interface{}{
-				"volume": payload.Volume,
-			},
-		},
-		map[string]map[string]interface{}{
-			"Alexa.Speaker": map[string]interface{}{
-				"volume": payload.Volume,
-			},
-			"Alexa.EndpointHealth": map[string]interface{}{
-				"connectivity": map[string]interface{}{
-					"value": "OK",
-				},
-			},
-		})
+		"Alexa.Speaker",
+		"volume",
+		payload.Volume,
+	)
+
 }
 
 func (s *speaker) AdjustVolume(endpoint Endpoint, payload *AdjustVolumeRequest) (resp EndpointResponse, err error) {
-	device := s.sm.GetDevice(endpoint.EndpointID)
-	if device == nil {
-		return resp, fmt.Errorf("Could not find endpoint with id %s", endpoint.EndpointID)
-	}
-
-	capability := device.GetCapabilityHandler("Alexa.Speaker")
-	if capability == nil {
-		return resp, fmt.Errorf("%s doesnt implement Speaker", endpoint.EndpointID)
-	}
 
 	var volume int
-	if prop, ok := capability.propertyHandlers["volume"]; ok {
-		val, err := prop.GetValue()
-		if err != nil {
-			return resp, err
-		}
-
+	if val, err := s.sm.getValueForProperty(endpoint, "Alexa.Speaker", "volume"); err != nil {
 		volume = val.(int)
 	}
 
@@ -87,21 +51,10 @@ func (s *speaker) AdjustVolume(endpoint Endpoint, payload *AdjustVolumeRequest) 
 		volume = 0
 	}
 
-	return s.sm.setPropertyStatesAndCreateEndpointResponse(
+	return s.sm.setPropAndEndpointHealthResponse(
 		endpoint,
-		map[string]map[string]interface{}{
-			"Alexa.Speaker": map[string]interface{}{
-				"volume": volume,
-			},
-		},
-		map[string]map[string]interface{}{
-			"Alexa.Speaker": map[string]interface{}{
-				"volume": volume,
-			},
-			"Alexa.EndpointHealth": map[string]interface{}{
-				"connectivity": map[string]interface{}{
-					"value": "OK",
-				},
-			},
-		})
+		"Alexa.Speaker",
+		"volume",
+		volume,
+	)
 }

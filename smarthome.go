@@ -27,12 +27,15 @@ func New(auth AuthorizationInterface) (sh *Smarthome) {
 	}
 
 	sh.controllers = map[string]interface{}{
-		"Alexa":                      &alexa{sh},
-		"Alexa.Authorization":        &authorization{sh},
-		"Alexa.Discovery":            &discovery{sh},
-		"Alexa.PowerController":      &powerController{sh},
-		"Alexa.BrightnessController": &brightnessController{sh},
-		"Alexa.Speaker":              &speaker{sh},
+		"Alexa":                            &alexa{sh},
+		"Alexa.Authorization":              &authorization{sh},
+		"Alexa.Discovery":                  &discovery{sh},
+		"Alexa.PowerController":            &powerController{sh},
+		"Alexa.BrightnessController":       &brightnessController{sh},
+		"Alexa.Speaker":                    &speaker{sh},
+		"Alexa.ColorController":            &colorController{sh},
+		"Alexa.ColorTemperatureController": &colorTemperatureController{sh},
+		"Alexa.PercentageController":       &percentageController{sh},
 	}
 
 	return
@@ -143,6 +146,63 @@ func (s *Smarthome) Handle(req *Request) *Response {
 		},
 		Context: context,
 	}
+}
+
+func (s *Smarthome) invokeAction(endpoint Endpoint, capability string, action string, val interface{}) (interface{}, error) {
+	device := s.GetDevice(endpoint.EndpointID)
+	if device == nil {
+		return nil, fmt.Errorf("Could not find endpoint with id %s", endpoint.EndpointID)
+	}
+
+	capabilityController := device.GetCapabilityHandler(capability)
+	if capabilityController == nil {
+		return nil, fmt.Errorf("%s doesnt implement %s", endpoint.EndpointID, capability)
+	}
+
+	if action, ok := capabilityController.actionHandlers[action]; ok {
+		return action(val)
+	}
+
+	return nil, fmt.Errorf("%s controller %s doesnt have action %s", endpoint.EndpointID, capability, action)
+
+}
+
+func (s *Smarthome) getValueForProperty(endpoint Endpoint, capability string, prop string) (interface{}, error) {
+	device := s.GetDevice(endpoint.EndpointID)
+	if device == nil {
+		return nil, fmt.Errorf("Could not find endpoint with id %s", endpoint.EndpointID)
+	}
+
+	capabilityController := device.GetCapabilityHandler(capability)
+	if capabilityController == nil {
+		return nil, fmt.Errorf("%s doesnt implement %s", endpoint.EndpointID, capability)
+	}
+
+	if prop, ok := capabilityController.propertyHandlers[prop]; ok {
+		return prop.GetValue()
+	}
+
+	return nil, fmt.Errorf("%s controller %s doesnt have property %s", endpoint.EndpointID, capability, prop)
+}
+
+func (s *Smarthome) setPropAndEndpointHealthResponse(endpoint Endpoint, capability string, prop string, val interface{}) (resp EndpointResponse, err error) {
+	return s.setPropertyStatesAndCreateEndpointResponse(
+		endpoint,
+		map[string]map[string]interface{}{
+			capability: map[string]interface{}{
+				prop: val,
+			},
+		},
+		map[string]map[string]interface{}{
+			capability: map[string]interface{}{
+				prop: val,
+			},
+			"Alexa.EndpointHealth": map[string]interface{}{
+				"connectivity": map[string]interface{}{
+					"value": "OK",
+				},
+			},
+		})
 }
 
 func (s *Smarthome) setPropertyStatesAndCreateEndpointResponse(endpoint Endpoint, set map[string]map[string]interface{}, respond map[string]map[string]interface{}) (resp EndpointResponse, err error) {

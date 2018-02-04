@@ -145,6 +145,7 @@ type CapabilityHandler struct {
 	CameraStreamConfigurations []CameraStreamConfiguration
 
 	propertyHandlers map[string]PropertyHandler
+	actionHandlers   map[string]func(interface{}) (interface{}, error)
 }
 
 func (ch *CapabilityHandler) AddPropertyHandler(name string, ph PropertyHandler) {
@@ -153,6 +154,14 @@ func (ch *CapabilityHandler) AddPropertyHandler(name string, ph PropertyHandler)
 	}
 
 	ch.propertyHandlers[name] = ph
+}
+
+func (ch *CapabilityHandler) AddAction(name string, handler func(interface{}) (interface{}, error)) {
+	if ch.actionHandlers == nil {
+		ch.actionHandlers = map[string]func(interface{}) (interface{}, error){}
+	}
+
+	ch.actionHandlers[name] = handler
 }
 
 type PropertyHandler interface {

@@ -57,17 +57,17 @@ func main() {
  - [x] Authorization 
  - [ ] CameraStreamController 
  - [ ] ChannelController 
- - [ ] ColorTemperatureController 
+ - [x] ColorTemperatureController 
  - [x] Discovery 
  - [ ] InputController 
- - [ ] PercentageController 
+ - [x] PercentageController 
  - [x] PowerController 
  - [ ] SceneController 
  - [x] StateReport 
  - [ ] TemperatureSensor 
  - [x] BrightnessController 
- - [ ] ChangeReport 
- - [ ] ColorController 
+ - [x] ChangeReport 
+ - [x] ColorController 
  - [ ] DeferredResponse 
  - [x] ErrorResponse 
  - [ ] LockController 
