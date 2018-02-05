@@ -1,5 +1,9 @@
 # go-alexa-smarthome
 
+
+[![GoDoc](https://godoc.org/github.com/orktes/go-alexa-smarthome?status.svg)](https://godoc.org/github.com/orktes/go-alexa-smarthome)
+
+
 ```go
 
 package main
