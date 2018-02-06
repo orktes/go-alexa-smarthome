@@ -24,7 +24,7 @@ func (bc *brightnessController) SetBrightness(endpoint Endpoint, payload *SetBri
 func (bc *brightnessController) AdjustBrightness(endpoint Endpoint, payload *AdjustBrightnessRequest) (resp EndpointResponse, err error) {
 	var brightness int
 
-	if val, err := bc.sm.getValueForProperty(endpoint, "Alexa.BrightnessController", "brightness"); err != nil {
+	if val, err := bc.sm.getValueForProperty(endpoint, "Alexa.BrightnessController", "brightness"); err == nil {
 		brightness = val.(int)
 	}
 

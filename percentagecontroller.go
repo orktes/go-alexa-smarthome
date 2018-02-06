@@ -24,7 +24,7 @@ func (bc *percentageController) SetPercentage(endpoint Endpoint, payload *SetPer
 func (bc *percentageController) AdjustPercentage(endpoint Endpoint, payload *AdjustPercentageRequest) (resp EndpointResponse, err error) {
 	var percentage int
 
-	if val, err := bc.sm.getValueForProperty(endpoint, "Alexa.PercentageController", "percentage"); err != nil {
+	if val, err := bc.sm.getValueForProperty(endpoint, "Alexa.PercentageController", "percentage"); err == nil {
 		percentage = val.(int)
 	}
 

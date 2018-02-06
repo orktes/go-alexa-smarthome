@@ -40,7 +40,7 @@ func (s *speaker) SetVolume(endpoint Endpoint, payload SetVolumeRequest) (resp E
 func (s *speaker) AdjustVolume(endpoint Endpoint, payload *AdjustVolumeRequest) (resp EndpointResponse, err error) {
 
 	var volume int
-	if val, err := s.sm.getValueForProperty(endpoint, "Alexa.Speaker", "volume"); err != nil {
+	if val, err := s.sm.getValueForProperty(endpoint, "Alexa.Speaker", "volume"); err == nil {
 		volume = val.(int)
 	}
 
