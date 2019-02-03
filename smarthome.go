@@ -55,13 +55,11 @@ func (s *Smarthome) GetDevice(id string) Device {
 	return s.devices[id]
 }
 
-func (s *Smarthome) Handle(req *Request) *Response {
+func (s *Smarthome) Handle(req *Request) (*Response, error) {
 	namespace := req.Directive.Header.Namespace
 	controller, ok := s.controllers[namespace]
 	if !ok {
-		// TODO send unknown namespace error
-		println("TODO")
-		return nil
+		return nil, fmt.Errorf("Controller %s has not been implemented", namespace)
 	}
 
 	name := req.Directive.Header.Name
@@ -69,9 +67,7 @@ func (s *Smarthome) Handle(req *Request) *Response {
 	t := reflect.TypeOf(controller)
 	m, ok := t.MethodByName(name)
 	if !ok {
-		println("TODO", "no such method", name)
-		// TODO send unknown name error
-		return nil
+		return nil, fmt.Errorf("Method %s has not been implemented for %s", name, namespace)
 	}
 
 	vals := []reflect.Value{reflect.ValueOf(controller)}
@@ -145,7 +141,7 @@ func (s *Smarthome) Handle(req *Request) *Response {
 			Endpoint: req.Directive.Endpoint,
 		},
 		Context: context,
-	}
+	}, nil
 }
 
 func (s *Smarthome) invokeAction(endpoint Endpoint, capability string, action string, val interface{}) (interface{}, error) {
